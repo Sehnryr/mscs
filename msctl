@@ -327,14 +327,9 @@ EOF
 # @return The Java PID.
 # ---------------------------------------------------------------------------
 getJavaPID() {
-  local PID MCUSER
   MCUSER=$(whoami)
-  PID=$(
-    ps -a -U $MCUSER -o pid,comm,args -ww | $PERL -sne '
-      if ($_ =~ /^\s*(\d+)\s+java.+mscs-world=\Q$world\E$/) { print $1; }
-    ' -- -world="$1"
-  )
-  printf "%d\n" $PID
+  PID=$(pgrep -U "$MCUSER" -f "java.*mscs-world=$1$")
+  echo "$PID"
 }
 
 # ---------------------------------------------------------------------------
